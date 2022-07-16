@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>Calendar</title>
+</head>
+
+<body>
+  <div class="container">
+    
+  </div>
+
+  <script>
+    let globalMonth = 7;
+    let globalYear = 2022;
+    
+    function createCalendar(elem, year, month) {
+      elem = document.querySelector(elem);
+
+      globalMonth = month;
+      let mon = month - 1;
+      let d = new Date(year, mon);
+
+      let table = `
+      <div id='sana'>${month}.${year}</div>
+
+      <circle></circle>
+      <rect></rect>
+      <table>
+        <button id = 'pre' onclick=prevMonth()> < </button>
+        <button id = 'next' onclick=nextMonth()> > </button>
+        <tr>
+          <th>Mon</th>
+          <th>Tue</th>
+          <th>Wed</th>
+          <th>Thu</th>
+          <th>Fri</th>
+          <th>Sat</th>
+          <th>Sun</th>
+        </tr>
+        <tr>
+      `;
+
+      for (let i = 0; i < getDay(d); i++) {
+        table += '<td></td>'
+      }
+
+      while(d.getMonth() == mon) {
+        table += '<td>' + d.getDate() + '</td>';
+        if(getDay(d) % 7 == 6) {
+          table += '</tr><tr>';
+        }
+        d.setDate(d.getDate() + 1);
+      }
+
+      if(getDay(d) != 0) {
+        for (let i = getDay(d); i < 7; i++) {
+          table += '<td></td>';
+        }
+      }
+
+      table += '</tr></table>';
+      elem.innerHTML = table;
+    }
+
+    function getDay(date) {
+      let day = date.getDay();
+      if (day == 0) day = 7;
+      return day - 1;
+    }
+
+    function prevMonth() {
+      globalMonth--;
+
+      if (globalMonth == 0) {
+        globalMonth = 12;
+        globalYear--;
+      }
+
+      createCalendar('div', globalYear, globalMonth);
+    }
+
+    function nextMonth() {
+      globalMonth++;
+
+      if (globalMonth == 13) {
+        globalMonth = 1;
+        globalYear++;
+      }
+
+      createCalendar('div', globalYear, globalMonth);
+    }
+    createCalendar('div', globalYear, globalMonth);
+
+
+    // for(let i = 1; i <= 12; i++) {
+    //    createCalendar('body', 2022, i);
+    // }
+  </script>
+</body>
+
+</html>
